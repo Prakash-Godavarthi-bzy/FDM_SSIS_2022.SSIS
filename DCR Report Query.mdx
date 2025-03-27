@@ -1,0 +1,174 @@
+with 
+Member MonthActual as
+(
+	[Scenario].[Scenario].[Actual]
+	,[Measures].[Converted Amount]
+	,[Time Series].[Time Series].[Current Period]
+	,linkmember(
+		[Accounting Period].[Y - H - Q - M].CurrentMember
+		,[Target Period].[Tgt Y - H - Q - M]
+	)
+	,[Accounting Period].[Y - H - Q - M].CurrentMember.Parent.Parent.Parent
+
+), FORMAT_STRING = "#,##0;(#,##0)"
+
+Member MonthBudget as
+((
+	strtomember('[Scenario].[Scenario].&[4]')
+	,[Measures].[Converted Amount]
+	,[Time Series].[Time Series].[Current Period]
+	,ancestor(
+		[Accounting Period].[Y - H - Q - M].CurrentMember
+		,[Accounting Period].[Y - H - Q - M].[Accounting Year]
+	)
+) / 12), FORMAT_STRING = "#,##0;(#,##0)"
+
+Member YTDActual as
+(
+	[Scenario].[Scenario].[Actual]
+	,[Measures].[Converted Amount]
+	,[Time Series].[Time Series].[YTD Target Period]
+	,linkmember(
+		[Accounting Period].[Y - H - Q - M].CurrentMember
+		,[Target Period].[Tgt Y - H - Q - M]
+	)
+	,[Accounting Period].[Y - H - Q - M].CurrentMember.Parent.Parent.Parent
+), FORMAT_STRING = "#,##0;(#,##0)"
+
+Member YTDBudget as
+MonthBudget *  [Accounting Period].[Accounting Month].CurrentMember.Properties("MEMBER_VALUE"), FORMAT_STRING = "#,##0;(#,##0)"
+
+member YTDVar as
+YTDActual-YTDBudget, FORMAT_STRING = "#,##0;(#,##0)"
+
+Member RemBudget as
+MonthBudget *  (12-[Accounting Period].[Accounting Month].CurrentMember.Properties("MEMBER_VALUE")), FORMAT_STRING = "#,##0;(#,##0)"
+
+Member RunRate as 
+YTDActual + RemBudget, FORMAT_STRING = "#,##0;(#,##0)"
+
+Member FYBudget as
+MonthBudget *  12, FORMAT_STRING = "#,##0;(#,##0)"
+
+Member FYForecast as
+(
+	strtomember('[Scenario].[Scenario].&[7]')
+	,[Measures].[Converted Amount]
+	,[Time Series].[Time Series].[Current Period]
+	,ancestor(
+		[Accounting Period].[Y - H - Q - M].CurrentMember
+		,[Accounting Period].[Y - H - Q - M].[Accounting Year]
+	)
+), FORMAT_STRING = "#,##0;(#,##0)"
+
+Member FYBudForeVar as
+FYBudget - FYForecast, FORMAT_STRING = "#,##0;(#,##0)"
+member key_at as
+iif(FYBudget+YTDActual =0,null,[Account Tree].[Account Tree].CurrentMember.Properties("Key") )
+
+member key_tt as
+iif(FYBudget+YTDActual =0,null,[Trifocus Tree].[Trifocus Tree].CurrentMember.Properties("Key") )
+
+member key_et as
+iif(FYBudget+YTDActual =0,null,[Entity Tree].[Entity Tree].CurrentMember.Properties("Key") )
+
+Set ExpSet as 
+{
+ MonthActual
+,MonthBudget
+,YTDActual
+,YTDBudget
+,YTDVar
+,RemBudget
+,RunRate
+,FYBudget
+,FYForecast
+,FYBudForeVar
+,key_at
+,key_tt
+,key_et
+}
+
+Set AccTreeToExclude as
+descendants([Account Tree].[Account Tree].[Names Expenses],[Account Tree].[Account Tree].[Level 14],SELF_AND_BEFORE)+descendants([Account Tree].[Account Tree].[Premium Levy],[Account Tree].[Account Tree].[Level 14],SELF_AND_BEFORE) + [Account Tree].[Account Tree].&[16_A0_50806] + [Account Tree].[Account Tree].&[16_A0_50432]
+
+Set PersAccsToExclude as 
+iif(true=true,null,descendants([Account Tree].[Account Tree].[Personnel],[Account Tree].[Account Tree].[Level 14],SELF_AND_BEFORE))
+
+set paramDepts as 
+{
+strtoset('[Trifocus Tree].[Trifocus Tree].&[25_C1_IT02]')
+}
+
+set allLeaves as 
+DESCENDANTS([Trifocus Tree].[Trifocus Tree].[All] ,[Trifocus Tree].[Trifocus Tree].[Level 07],LEAVES)
+
+set paramNotLeaves as 
+paramDepts-allLeaves
+
+set paramLeaves as 
+INTERSECT( paramDepts, allLeaves )
+
+set inferredDepts as
+descendants(paramNotLeaves,1) - paramNotLeaves
++paramLeaves
+
+
+set paramEnts as 
+{
+strtoset('[Entity Tree].[Entity Tree].&[48_UKROW_LON]')
+}
+
+set allLeavesEnt as 
+DESCENDANTS([Entity Tree].[Entity Tree].[All] ,[Entity Tree].[Entity Tree].[Level 08],LEAVES)
+
+set paramNotLeavesEnt as 
+paramEnts-allLeavesEnt
+
+set paramLeavesEnt as 
+INTERSECT( paramEnts, allLeavesEnt )
+
+set inferredEnts as
+descendants(paramNotLeavesEnt,1) - paramNotLeavesEnt
++paramLeavesEnt
+
+set excludeEnt as 
+filter(
+	filter(
+	[Entity Tree].[Entity Tree].members
+	,aggregate({[Entity].[Entity Code].&[BUQS],[Entity].[Entity Code].&[BRQS],[Entity].[Entity Code].&[QSGAAP]},[Measures].[hBri Entity Entity Tree Count])>0
+	)
+,IsLeaf([Entity Tree].[Entity Tree].CurrentMember) )
+
+member [Account].[Account].[All].[AllExcept50806] as
+[Account].[Account].[All] - {[Account].[Account].&[50806], [Account].[Account].&[50432]}
+
+select ExpSet
+on 0,
+non empty
+{
+inferredEnts
+- excludeEnt -descendants([Entity Tree].[Entity Tree].[Out of Scope],[Entity Tree].[Entity Tree].[Level 08],SELF_AND_BEFORE)
+}
+*{
+DRILLDOWNLEVEL(strtomember('[Account Tree].[Account Tree].&[16_10_10_10_10_100_10_1000_500_500_10_500_100_500_1000_5000_10_5000_100_5030]'))
+- iif(isleaf(strtomember('[Account Tree].[Account Tree].&[16_10_10_10_10_100_10_1000_500_500_10_500_100_500_1000_5000_10_5000_100_5030]')),null
+	,strtomember('[Account Tree].[Account Tree].&[16_10_10_10_10_100_10_1000_500_500_10_500_100_500_1000_5000_10_5000_100_5030]'))
+- AccTreeToExclude
+- PersAccsToExclude
+} 
+* inferredDepts 
+on 1
+from
+[FinanceDataMart]
+where
+(
+
+strtoset('[Accounting Period].[Y - H - Q - M].[Accounting Period].&[202308]')
+,strtoset('[Cur Reporting Currency].[Rep Curr].&[GBP]')
+,strtoset('[Cur Rate Scenario].[Rate Scenario].[Budget 2022 B2]')
+,{{[Process].[Process].[Process].Members}- {[Process].[Process].&[206],[Process].[Process].&[45],[Process].[Process].&[46]}}
+,({[Account].[Account].Account.Members 
+- [Account].[Account].&[50806]
+-[Account].[Account].&[50432] -[Account].[Account].&[50433]})
+)
