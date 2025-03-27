@@ -1,0 +1,192 @@
+533,570,653,654,655
+BIFR, BIUK, BISP, BIGE, BISW
+srinivasa-tummala-bzy
+srinivasa.tummala@beazley.com
+srinivasa.tummala@beazley.com
+
+http://ukprdb038/reports/Pages/Report.aspx?ItemPath=/DB_restore/Report+Folder/RestoreDatabase
+
+392,394
+404
+
+SCREQ0213016
+
+sec.w2kfileserver.groups.Finance.Reporting.FDM.Feeds-RW
+App.FinanceDataMartCube.GLReporting.RO
+Sec.FinanceDataMart_MDS.User.RO 
+
+
+sec.sso.Sharepoint.user.FDM
+sec.sso.Sharepoint.Support.FDM
+
+New FDM DB and SSIS Servers:
+
+DEV – UKDVDB309 -- DBS-sbj-FinanceDataMart-DEV
+SYS – UKDVDB311 -- DBS-5tq-FinanceDataMart-SYS
+UAT – UKDVDB313 -- DBS-wk4-FinanceDataMart-UAT
+PRD - ukprdb206 -- DBS-cdy-FinanceDataMart-PRD
+
+New FDM SSAS Servers:
+Dev – UKDVDB310\UKAC01 - DBS-c4w-FDM_CUBE-DEV\UKAC01
+Sys – UKDVDB312\UKAC01 - DBS-v3f-FDM_CUBE-SYS\UKAC01
+UAT – UKDVDB314\UKAC01 - DBS-ye4-FDM_CUBE-UAT\UKAC01
+PRD - ukprdb207\UKAC01 - DBS-rkx-FDM_CUBE-PRD\UKAC01
+
+New TDM SSAS Servers:
+
+DBS-0jr-TDM-DEV,12871 -- DBS-0jr-TDM-DEV\UKAC01
+DBS-0n1-TDM-SYS,12870 -- DBS-0n1-TDM-SYS\UKAC01
+DBS-79i-TDM-UAT,12870 -- DBS-79i-TDM-UAT\UKAC01
+DBS-n21-TDM-PRD,12870 -- DBS-n21-TDM-PRD\UKAC01
+
+
+
+BFL\SVC_OctoTentSQL_DEV
+BFL\SVC_OctoTentSQL_PRD
+
+FDM:
+Dev:UKDVDB111\ukac01 -- DBS-sbj-FinanceDataMart-DEV\ukac01
+SYS:UKDVDB106\ukac01 -- DBS-5tq-FinanceDataMart-SYS
+UAT:UKDVDB105\ukac01 -- DBS-wk4-FinanceDataMart-UAT
+PROD:UKPRDB051\ukac01 -- DBS-cdy-FinanceDataMart-PRD
+Nanda:ukdvdb115\ukacdv01
+FDM-Agresso UAT: UKDVDB263
+FDM-Agresso Sys: UKDVDB262
+
+Data Source=DBS-5tq-FinanceDataMart-SYS,12870;Initial Catalog=FDM_PROCESS
+SO1: 
+PROD: UKPRDB074
+
+
+
+Agresso	:
+Prod:UKPRDB079 (UKPRDB044\UKAG02)
+UAT:UKDVDB125\UKAG02	
+SysTest:UKDVDB126\UKAG02
+Dev: ukdvdb206
+FDM-Agresso UAT :UKDVDB207
+FDM-Agresso SYS :UKDVDB041
+
+DBS-o3e-Agresso-PRD,1415 
+DBS-7dk-Agresso-UAT,1415 -- UKDVDB207
+DBS-ki2-Agresso-SYS,1415 -- UKDVDB041
+DBS-kmo-Agresso-DEV,1115
+
+
+DBS-v5d-AgressoClaimsStageIn-UAT,1416
+DBS-rp1-AgressoClaimsStageIn-SYS,1416
+DBS-y5f-AgressoClaimsStageIn-DEV,1116
+
+Dataset - Datasets
+Data Source - Data Sources
+Target Report Folder - FDMPOC/Process Dashboard
+	FDMPOC/Business Reporting/Actuaries
+Target Server URL - http://ukdvdb151.bfl.local/Reportserver
+
+
+
+Apps Server : UKDVAP146
+EXEC Target : \\ukdvap146\AgressoDesktop\Bin\agresso.exe
+BIF: \\ukdvap146\Data Import\filename.txt
+Excelerator: http://agresso-fdmuat/agresso-reportengine/Service.asmx
+
+Username	
+BFL\PXY_FDM_DEV
+Password		
+H5IA)ITc^X0D
+
+Username	
+bfl\SVC_FDM_UAT
+Password		
+2ZnPV!svrWi6
+
+Username (UKDVDB106\ukac01) 	
+bfl\SVC_FDM_SYS
+Password		
+ffNLB#st3827
+
+UKPRDB060
+
+\\ukdvdb117\Feeds -- Dev
+\\bfl.local\uk-sys\Groups\Finance\Reporting\FDM\Feeds  --sys
+\\bfl.local\uk-uat\Groups\Finance\Reporting\FDM\Feeds -- UAT
+\\bfl.local\uk\Groups\Finance\Reporting\FDM\Feeds  -- Prod
+\\bfl.local\USData\finance\Reinsurance\Access Database Files\Databases
+
+SSRS SYS:
+http://sharepoint01sys/sites/Finance/FDM/DataConnections
+http://sharepoint01sys/sites/Finance/FDM/FDM System Reports SYS/Posting Engine
+http://sharepoint01sys/sites/Finance/FDM/
+http://sharepoint01sys/sites/Finance/FDM/DataConnections/FDMDBSYS.rsds
+AllocationRulesAuditTrail
+9100120325
+
+
+SSRS UAT:
+http://sharepoint01sys/sites/Finance/FDM/DataConnections
+http://sharepoint01sys/sites/Finance/FDM/FDM System Reports UAT/Posting Engine
+http://sharepoint01sys/sites/Finance/FDM/
+http://sharepoint01sys/sites/Finance/FDM/DataConnections/AgressoUAT.rsds
+http://sharepoint01sys/sites/Finance/FDM/DataConnections/FDMProcessUAT.rsds
+http://sharepoint01sys/sites/Finance/FDM/DataConnections/FDMDBUAT.rsds
+
+http://sharepoint01/sites/Finance/FDM/zData Connections/FDM Cube SSRS.rsds
+
+http://sharepoint01sys/sites/Finance/FDM/DataConnections
+
+http://sharepoint01sys/sites/Finance/FDM/DataConnections/FDMProcessUATNew.rsds
+http://sharepoint01sys/sites/Finance/FDM/DataConnections/FDMCubeUATNew.rsds
+http://sharepoint01sys/sites/Finance/FDM/DataConnections/AgressoUATNew.rsds
+http://sharepoint01/sites/Finance/FDM/zData Connections/FDMDB.rsds
+
+http://sharepoint01/sites/Finance/FDM/zData Connections/FDMDBUATNew.rsds
+http://sharepoint01/sites/Finance/FDM/zData Connections/CAMTDBUATNew.rsds
+
+http://sharepoint01sys/sites/Finance/FDM/FDM System Reports UAT New/Process Dashboard
+
+SSRS PRD:
+
+http://sharepoint01/sites/Finance/FDM/zData Connections/FDMProcess.rsds
+http://sharepoint01/sites/Finance/FDM/zData Connections/FDMProcess.rsds
+
+sys fdm cUDE: ukdvdb105\UKAC01
+
+bfl\tumms
+
+http://ukdvdb151.bfl.local/Reports/browse/
+http://ukdvdb151.bfl.local/Reportserver/browse/
+
+http://sharepoint01/sites/Finance/FDM/FDM%20System%20Reports/Forms/AllItems.aspx
+
+http://sharepoint01reports.bfl.local/ReportServer/Pages/ReportViewer.aspx?http://sharepoint01/sites/Finance/FDM/Business%20Reporting/Direct%20Cost%20Report/DCR%20Summary.rdl
+ServiceUrl=https://beazley.sharepoint.com/sites/PowerApp/;UserName=srinivasa.tummala@beazley.com;Domain=;ProxyUsername=;AuthorizationServerUrl=;AuthenticationCookieName=;ProxyMode=NoProxy;ProxyServer=;ProxyServerPort=0;ServiceTimeout=120;AuthenticationType=OnlineFederation;RetryOnIntermittentErrors=True;MultiAuthenticationSite=False;IgnoreCertificateErrors=False
+
+http://sharepoint01/sites/Finance/FDM/DataMapping/Lists/Posting%20Engine/AllItems.aspx?&&View={2FB49BAA-CD64-4D61-B893-606125E4D8AE}&InitialTabId=Ribbon%2EListItem&VisibilityContext=WSSTabPersistence&FilterField1=Title&FilterValue1=BID%20Earnings  ---posting quries
+
+Srinivasa.Tummala@beazley.com
+srinivasa-tummala-bzy
+jivika@11
+
+18.203.153.98/controller
+18.203.153.98/movieztream_ui
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+srinivasa-tummala-bzy
+
+Git Hub Token ac8801c47a9598963dfea3c69a2ac772b6ece3e4
